@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Fresher's Audition</title>
+    <style>
+        /* Global Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #ffe6e6, #e6f7ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1,h2,h3,h4 {
+            color:#4a3304;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border: 2px solid #ff6f61;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+
+        button {
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            background-color: #ff6f61;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff8f81;
+        }
+
+        /* Rocket Animation */
+        .rocket {
+            position: absolute;
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%) rotate(0deg);
+            transform-origin: center center;
+            font-size: 5rem;
+            transition: transform 1s ease, bottom 2s ease;
+        }
+
+        .rocket.launch {
+            transform: translateX(-50%) rotate(-90deg);
+            bottom: 120%;
+        }
+
+        /* Falling Letters */
+        .letters-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .letter {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #FF5722;
+            animation: dropLetter 1s forwards ease-in-out;
+            position: relative;
+            opacity: 0.1;
+        }
+
+        @keyframes dropLetter {
+            0% {
+                top: -100px;
+                opacity: 0.1;
+                transform: rotate(-90deg);
+            }
+            100% {
+                top: 0;
+                opacity: 1;
+                transform: rotate(0);
+            }
+        }
+
+        /* Text Containers */
+        .text-container {
+            background: #ffffff;
+            border: 2px solid #ff6f61;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            margin-top: 30px;
+            animation: fadeIn 1s forwards ease-in;
+            opacity: 0;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .text-container span {
+            color: #FF5722;
+            font-weight: bold;
+        }
+
+        /* Invitation Page Styling */
+        .invitation-container {
+            background: #ffffff;
+            border: 2px solid #ff6f61;
+            border-radius: 15px;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Main container holding the first page elements -->
+    <div class="main-container" id="inputPage">
+        <!-- Invitation paragraph in a nicely styled container -->
+        <div class="invitation-container">
+            <h1> 🎭 Fresher's Audition Awaits You! 🎭<br></h1>
+            <h2>Please enter your name below and receive the invitation</h2>
+            <h3><strong>Warm welcome</strong></h3>   
+            <h4>Prepare well, and we can't wait to see you shine!</h4>
+        </div>
+
+        <!-- Input for name -->
+        <input type="text" id="nameInput" placeholder="Your Name">
+        <button onclick="startWelcome()">Submit</button>
+    </div>
+
+    <!-- Welcome page that appears after submitting the name -->
+    <div class="main-container" id="welcomePage" style="display: none;">
+        <div class="rocket" id="rocket">🚀</div>
+        <div class="letters-container" id="lettersContainer"></div>
+
+        <!-- Welcome message (hidden until after letter animation) -->
+        <div class="text-container" id="welcomeMessage"></div>
+    </div>
+
+    <script>
+        function startWelcome() {
+            // Get the name from the input field
+            const name = document.getElementById("nameInput").value.trim();
+            if (!name) return alert("Please enter your name!");
+
+            // Hide the input page and show the welcome page
+            const inputPage = document.getElementById("inputPage");
+            const welcomePage = document.getElementById("welcomePage");
+            inputPage.style.display = "none";
+            welcomePage.style.display = "flex";
+
+            // Launch the rocket with rotation effect
+            const rocket = document.getElementById("rocket");
+            setTimeout(() => {
+                rocket.classList.add("launch");
+            }, 500); // Delay for syncing with the letter animation
+
+            // Animate falling letters
+            const lettersContainer = document.getElementById("lettersContainer");
+            const welcomeMessage = document.getElementById("welcomeMessage");
+
+            // Clear existing content before starting new animation
+            lettersContainer.innerHTML = "";
+            welcomeMessage.innerHTML = "";
+
+            // Wait for the rocket animation to finish, then animate letters
+            setTimeout(() => {
+                name.toUpperCase().split("").forEach((letter, index) => {
+                    const span = document.createElement("span");
+                    span.textContent = letter;
+                    span.classList.add("letter");
+                    span.style.animationDelay = `${index * 0.3}s`; // Stagger letter animation
+                    lettersContainer.appendChild(span);
+                });
+
+                // After letters, show the welcome message
+                setTimeout(() => {
+                    welcomeMessage.innerHTML = `
+                        <p>Welcome to the Fresher's Audition!</p>
+                        <p>Dear <span>${name}</span>,</p>
+                        <p>We are thrilled to have you join us!</p>
+                        <p>The GMC Pharmacy Batch 2022 invites you to the audition on 
+                        <strong>Sunday, December 1</strong> at <strong>1 PM</strong> in the laboratory.</p>
+                        <p>Prepare well, and we can't wait to see you shine!</p>
+                        <p><strong>Thank you,</strong></p>
+                        <p><strong>GMC Batch 2022</strong></p>
+                    `;
+                    welcomeMessage.style.animationDelay = `${name.length * 0.3 + 1}s`;
+                }, name.length * 300 + 500);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
